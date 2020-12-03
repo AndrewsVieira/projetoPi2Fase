@@ -130,7 +130,7 @@ public class QuestionService {
   }
 
   public static void updateQuestion(Question question) {
-    final String queryUpdate = "UPDATE question SET type_question = ? question = ? deleted = ?  where id = ?";
+    final String queryUpdate = "UPDATE question SET type_question = ?, question = ?, deleted = ?  where id = ?";
 
     final String query2 = "DELETE FROM alternative WHERE id_question = ?";
 
@@ -144,17 +144,15 @@ public class QuestionService {
 
       connection = ConnectionDataBase.getConnection();
       statement = connection.prepareStatement(queryUpdate);
-      statement.setString(1, question.getTypeQuestion().toString());
+      statement.setString(1, "Objetiva");
       statement.setString(2, question.getQuestion());
       statement.setBoolean(3, question.isDeleted());
       statement.setInt(4, question.getId());
-      resultSet = statement.getGeneratedKeys();
       statement.execute();
       statement.close();
 
       statement = connection.prepareStatement(query2);
       statement.setInt(1, question.getId());
-      resultSet = statement.getGeneratedKeys();
       statement.execute();
       statement.close();
 
@@ -173,6 +171,7 @@ public class QuestionService {
       connection.close();
     } catch (Exception e) {
       System.out.println(e.toString());
+      e.printStackTrace();
     } finally {
       try {
         if (resultSet != null) {
